@@ -1,5 +1,7 @@
 # local-descriptors-for-image-classification
 
+The code accompanying this is available [here](https://github.com/vdevmcitylp/local-descriptors-for-image-classification).
+
 Each file implements one of the variants of the [Local Binary Pattern (LBP)](http://jultika.oulu.fi/files/isbn9514270762.pdf).
 
 1. [Center Symmetric LBP](http://www.ee.oulu.fi/mvg/files/pdf/pdf_750.pdf)
@@ -15,6 +17,7 @@ In collaboration with [Bhargav Parsi](https://bhargav265.github.io/bhargavparsi/
 
 All these files have the same underlying structure with the only difference being in the algorithm being implemented.
 All algorithms are trained and tested on the CIFAR-10 dataset.
+
 I'll go through the structure of each file now.
 
 The first few lines are the necessary imports.
@@ -55,32 +58,32 @@ First, I pad the image with zeros before running the algorithm.
 The function then goes on to implement the respective algorithm (CS-LBP in this case). 
 
     cslbpImg = np.zeros((33, 33))
-		for x in range(1, 33):
-			for y in range(1, 33):
+    for x in range(1, 33):
+	for y in range(1, 33):
 				
-				s1 = heaviside(img[x-1, y-1] - img[x+1, y+1])
-				s2 = heaviside(img[x-1, y] - img[x+1, y])*2 
-				s3 = heaviside(img[x-1, y+1] - img[x+1, y-1])*4 
-				s4 = heaviside(img[x, y+1] - img[x, y-1])*8
+       	    s1 = heaviside(img[x-1, y-1] - img[x+1, y+1])
+	    s2 = heaviside(img[x-1, y] - img[x+1, y])*2 
+	    s3 = heaviside(img[x-1, y+1] - img[x+1, y-1])*4 
+	    s4 = heaviside(img[x, y+1] - img[x, y-1])*8
 
-				s = s1 + s2 + s3 + s4
+	    s = s1 + s2 + s3 + s4
 
-				cslbpImg[x, y] = s
+	    cslbpImg[x, y] = s
 
 We then compute the histogram of the resultant image to get the feature vector.
 
     hist = np.zeros(16).astype(int)
 
-		cslbpImg = cslbpImg.flatten()
-		for i in cslbpImg:
-			hist[i] = hist[i] + 1
+    cslbpImg = cslbpImg.flatten()
+    for i in cslbpImg:
+	hist[i] = hist[i] + 1
 
 ### Classification
 
 I'm using the [XGBoost](https://xgboost.readthedocs.io/en/latest/) Classifier for classification.
 
     model = XGBClassifier(n_estimators=800)
-	  model.fit(X_train, y_train)
+    model.fit(X_train, y_train)
 
 You have to play with the *n_estimators* to get the best accuracy.
 
