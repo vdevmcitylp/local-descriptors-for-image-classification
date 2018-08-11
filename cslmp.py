@@ -45,7 +45,7 @@ def colour2grayscale(R, grayscaleImgList):
 #     signal = 1.0/( 1 + np.exp( -signal ))
 
 #     return signal
-# # def heavyside(x):
+# # def heaviside(x):
 # # 	return x > 0
 
 def sigmoid(x):
