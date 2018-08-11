@@ -1,7 +1,5 @@
 # local-descriptors-for-image-classification
 
-The code accompanying this is available [here](https://github.com/vdevmcitylp/local-descriptors-for-image-classification).
-
 Each file implements one of the variants of the [Local Binary Pattern (LBP)](http://jultika.oulu.fi/files/isbn9514270762.pdf).
 
 1. [Center Symmetric LBP](http://www.ee.oulu.fi/mvg/files/pdf/pdf_750.pdf)
