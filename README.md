@@ -57,8 +57,7 @@ The function then goes on to implement the respective algorithm (CS-LBP in this 
 
     cslbpImg = np.zeros((33, 33))
     for x in range(1, 33):
-	for y in range(1, 33):
-				
+	for y in range(1, 33):		
        	    s1 = heaviside(img[x-1, y-1] - img[x+1, y+1])
 	    s2 = heaviside(img[x-1, y] - img[x+1, y])*2 
 	    s3 = heaviside(img[x-1, y+1] - img[x+1, y-1])*4 
@@ -74,7 +73,7 @@ We then compute the histogram of the resultant image to get the feature vector.
 
     cslbpImg = cslbpImg.flatten()
     for i in cslbpImg:
-	hist[i] = hist[i] + 1
+	    hist[i] = hist[i] + 1
 
 ### Classification
 
