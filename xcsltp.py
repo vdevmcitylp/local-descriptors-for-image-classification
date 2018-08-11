@@ -36,7 +36,7 @@ def colour2grayscale(R, grayscaleImgList):
 	# fo = open('gray1', 'wb')
 	# cPickle.dump(grayscaleImgList, fo)
 
-def heavyside(x, y):
+def heaviside(x, y):
 	
 	if x > 3 and y > 3:
 		return 2
@@ -68,10 +68,10 @@ def xcsLTP():
 		for x in range(1, 33):
 			for y in range(1, 33): 
 
-				s1 = heavyside(img[x-1, y-1]-img[x, y], img[x, y]-img[x+1, y+1]) 
-				#s2 = heavyside((img[x-1, y]-img[x+1, y]+img[x, y])+(img[x-1, y]-img[x, y])*(img[x+1, y]-img[x, y]))*3 
-				s3 = heavyside(img[x-1, y+1]-img[x, y], img[x, y]-img[x+1, y-1])*3
-				#s4 = heavyside((img[x, y+1]-img[x, y-1]+img[x, y])+((img[x, y+1]-img[x, y])*(img[x, y-1]-img[x, y])))*27
+				s1 = heaviside(img[x-1, y-1]-img[x, y], img[x, y]-img[x+1, y+1]) 
+				#s2 = heaviside((img[x-1, y]-img[x+1, y]+img[x, y])+(img[x-1, y]-img[x, y])*(img[x+1, y]-img[x, y]))*3 
+				s3 = heaviside(img[x-1, y+1]-img[x, y], img[x, y]-img[x+1, y-1])*3
+				#s4 = heaviside((img[x, y+1]-img[x, y-1]+img[x, y])+((img[x, y+1]-img[x, y])*(img[x, y-1]-img[x, y])))*27
 
 				#s = s1 + s2 + s3 + s4
 				s = s1 + s3
