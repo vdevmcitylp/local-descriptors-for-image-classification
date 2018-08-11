@@ -48,9 +48,9 @@ This varies from operator to operator and is defined in the *heaviside* function
 First, I pad the image with zeros before running the algorithm. 
 
     img = np.concatenate((img, zeroVertical), axis=1)
-		img = np.concatenate((zeroVertical, img), axis=1)
-		img = np.concatenate((zeroHorizontal, img), axis=0)
-		img = np.concatenate((img, zeroHorizontal), axis=0)
+    img = np.concatenate((zeroVertical, img), axis=1)
+    img = np.concatenate((zeroHorizontal, img), axis=0)
+    img = np.concatenate((img, zeroHorizontal), axis=0)
 
 The function then goes on to implement the respective algorithm (CS-LBP in this case). 
 
@@ -58,10 +58,10 @@ The function then goes on to implement the respective algorithm (CS-LBP in this 
 		for x in range(1, 33):
 			for y in range(1, 33):
 				
-				s1 = heavyside(img[x-1, y-1] - img[x+1, y+1])
-				s2 = heavyside(img[x-1, y] - img[x+1, y])*2 
-				s3 = heavyside(img[x-1, y+1] - img[x+1, y-1])*4 
-				s4 = heavyside(img[x, y+1] - img[x, y-1])*8
+				s1 = heaviside(img[x-1, y-1] - img[x+1, y+1])
+				s2 = heaviside(img[x-1, y] - img[x+1, y])*2 
+				s3 = heaviside(img[x-1, y+1] - img[x+1, y-1])*4 
+				s4 = heaviside(img[x, y+1] - img[x, y-1])*8
 
 				s = s1 + s2 + s3 + s4
 
