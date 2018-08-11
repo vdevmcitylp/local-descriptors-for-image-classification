@@ -40,7 +40,7 @@ def colour2grayscale(R, grayscaleImgList):
 	# fo = open('gray1', 'wb')
 	# cPickle.dump(grayscaleImgList, fo)
 
-def heavyside(x):
+def heaviside(x):
 	return x >= 0
 
 def xcsLBP():
@@ -65,7 +65,7 @@ def xcsLBP():
 		xcslbpImg = np.zeros((33, 33))
 		for x in range(1, 33):
 			for y in range(1, 33):
-				xcslbpImg[x, y] = heavyside((img[x-1, y-1]-img[x+1, y+1]+img[x, y])+(img[x-1, y-1]-img[x, y])*(img[x+1, y+1]-img[x, y])) + heavyside((img[x-1, y]-img[x+1, y]+img[x, y])+(img[x-1, y]-img[x, y])*(img[x+1, y]-img[x, y]))*2 + heavyside((img[x-1, y+1]-img[x+1, y-1]+img[x, y])+((img[x-1, y+1]-img[x, y])*(img[x+1, y-1]-img[x, y])))*4 + heavyside((img[x, y+1]-img[x, y-1]+img[x, y])+((img[x, y+1]-img[x, y])*(img[x, y-1]-img[x, y])))*8
+				xcslbpImg[x, y] = heaviside((img[x-1, y-1]-img[x+1, y+1]+img[x, y])+(img[x-1, y-1]-img[x, y])*(img[x+1, y+1]-img[x, y])) + heaviside((img[x-1, y]-img[x+1, y]+img[x, y])+(img[x-1, y]-img[x, y])*(img[x+1, y]-img[x, y]))*2 + heaviside((img[x-1, y+1]-img[x+1, y-1]+img[x, y])+((img[x-1, y+1]-img[x, y])*(img[x+1, y-1]-img[x, y])))*4 + heaviside((img[x, y+1]-img[x, y-1]+img[x, y])+((img[x, y+1]-img[x, y])*(img[x, y-1]-img[x, y])))*8
 
 		xcslbpImg = xcslbpImg[1:33, 1:33].astype(int) 	
 		plt.imshow(img, cmap = 'gray')
