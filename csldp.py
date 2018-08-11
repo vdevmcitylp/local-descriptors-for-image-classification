@@ -36,7 +36,7 @@ def colour2grayscale(R, grayscaleImgList):
 	# fo = open('gray1', 'wb')
 	# cPickle.dump(grayscaleImgList, fo)
 
-def heavysideLDP(x):
+def heavisideLDP(x):
 	return not(x > 0)
 
 def csLDP():
@@ -61,7 +61,7 @@ def csLDP():
 		csldpImg = np.zeros((33, 33))
 		for x in range(1, 33):
 			for y in range(1, 33):
-				csldpImg[x, y] = heavysideLDP((img[x-1, y-1]-img[x, y])*(img[x, y]-img[x+1, y+1])) + heavysideLDP((img[x-1, y]-img[x, y])*(img[x, y]-img[x+1, y]))*2 + heavysideLDP((img[x-1, y+1]-img[x, y])*(img[x, y]-img[x+1, y-1]))*4 + heavysideLDP((img[x, y+1]-img[x, y])*(img[x, y]-img[x, y-1]))*8
+				csldpImg[x, y] = heavisideLDP((img[x-1, y-1]-img[x, y])*(img[x, y]-img[x+1, y+1])) + heavisideLDP((img[x-1, y]-img[x, y])*(img[x, y]-img[x+1, y]))*2 + heavisideLDP((img[x-1, y+1]-img[x, y])*(img[x, y]-img[x+1, y-1]))*4 + heavisideLDP((img[x, y+1]-img[x, y])*(img[x, y]-img[x, y-1]))*8
 
 		csldpImg = csldpImg[1:33, 1:33].astype(int) 	
 		plt.imshow(img, cmap = 'gray')
