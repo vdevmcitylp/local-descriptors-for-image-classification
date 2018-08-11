@@ -40,7 +40,7 @@ def colour2grayscale(R, grayscaleImgList):
 	# fo = open('gray1', 'wb')
 	# cPickle.dump(grayscaleImgList, fo)
 
-def heavyside(x):
+def heaviside(x):
 	return x > 0
 
 def csLBP():
@@ -66,10 +66,10 @@ def csLBP():
 		for x in range(1, 33):
 			for y in range(1, 33):
 				
-				s1 = heavyside(img[x-1, y-1] - img[x+1, y+1])
-				s2 = heavyside(img[x-1, y] - img[x+1, y])*2 
-				s3 = heavyside(img[x-1, y+1] - img[x+1, y-1])*4 
-				s4 = heavyside(img[x, y+1] - img[x, y-1])*8
+				s1 = heaviside(img[x-1, y-1] - img[x+1, y+1])
+				s2 = heaviside(img[x-1, y] - img[x+1, y])*2 
+				s3 = heaviside(img[x-1, y+1] - img[x+1, y-1])*4 
+				s4 = heaviside(img[x, y+1] - img[x, y-1])*8
 
 				s = s1 + s2 + s3 + s4
 
