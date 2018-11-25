@@ -1,8 +1,6 @@
 # local-descriptors-for-image-classification
 
-## UPDATE
-
-My paper has been accepted! Check it out [here](https://www.igi-global.com/article/center-symmetric-local-descriptors-for-image-classification/217023).
+UPDATE: My paper has been accepted! Check it out [here](https://www.igi-global.com/article/center-symmetric-local-descriptors-for-image-classification/217023).
 
 Each file implements one of the variants of the [Local Binary Pattern (LBP)](http://jultika.oulu.fi/files/isbn9514270762.pdf).
 
