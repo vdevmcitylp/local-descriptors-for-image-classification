@@ -1,5 +1,9 @@
 # local-descriptors-for-image-classification
 
+## UPDATE
+
+My paper has been accepted! Check it out [here](https://www.igi-global.com/article/center-symmetric-local-descriptors-for-image-classification/217023).
+
 Each file implements one of the variants of the [Local Binary Pattern (LBP)](http://jultika.oulu.fi/files/isbn9514270762.pdf).
 
 1. [Center Symmetric LBP](http://www.ee.oulu.fi/mvg/files/pdf/pdf_750.pdf)
@@ -10,8 +14,6 @@ Each file implements one of the variants of the [Local Binary Pattern (LBP)](htt
 6. [Extended Center Symmetric Local Binary Pattern](https://hal.archives-ouvertes.fr/hal-01227955/document)
 7. Extended Center Symmetric Local Mapped Pattern
 8. [Extended Center Symmetric Local Ternary Pattern](https://link.springer.com/chapter/10.1007/978-3-642-23321-0_56)
-
-In collaboration with [Bhargav Parsi](https://bhargav265.github.io/bhargavparsi/), I've proposed two new local descriptors and the paper is under review, so fingers crossed! I'll release the code for them post acceptance.
 
 All these files have the same underlying structure with the only difference being in the algorithm being implemented.
 All algorithms are trained and tested on the CIFAR-10 dataset.
