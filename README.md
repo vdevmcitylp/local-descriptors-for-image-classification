@@ -13,6 +13,25 @@ Each file implements one of the variants of the [Local Binary Pattern (LBP)](htt
 7. Extended Center Symmetric Local Mapped Pattern
 8. [Extended Center Symmetric Local Ternary Pattern](https://link.springer.com/chapter/10.1007/978-3-642-23321-0_56)
 
+
+## Setup
+
+### Environment 
+```
+- Python 3.7.6
+- Ubuntu 16.04
+```
+
+Preferably, create a new environment using [virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
+
+### Requirements
+
+After activating the virtual environment, run the following command to install dependencies.
+
+```
+pip install -r requirements.txt
+```
+
 All these files have the same underlying structure with the only difference being in the algorithm being implemented.
 All algorithms are trained and tested on the CIFAR-10 dataset.
 
