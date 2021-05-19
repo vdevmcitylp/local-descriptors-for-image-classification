@@ -32,36 +32,40 @@ After activating the virtual environment, run the following command to install d
 pip install -r requirements.txt
 ```
 
-All these files have the same underlying structure with the only difference being in the algorithm being implemented.
+### Datset Setup
+
+Download the CIFAR-10 dataset from [here]() and extract in the `dataset` directory.
+
+For CIFAR-10, run this command to convert the images to grayscale.
+
+```
+python data_helper.py
+```
+
+This is a helper function for loading, preprocessing and saving the preprocessed images to disk for the CIFAR-10 dataset
+
+Please write your own function for a custom dataset which,
+- Converts images to grayscale (you can use OpenCV functions)
+- Saves the converted images to disk
+
+<hr>
+
+All the files in ```operators/``` have the same underlying structure with the only difference being in the algorithm being implemented.
 All algorithms are trained and tested on the CIFAR-10 dataset.
 
-I'll go through the structure of each file now.
+## To compute features
 
-The first few lines are the necessary imports.
+    python main.py --operator cslbp --img_height 32 --img_width 32
 
-### Reading Input File
+The above command will compute CS-LBP features, check the `operator` argument for more choices.
 
-    def unpickle(file):
-	
-        fo = open(file, 'rb')
-        dict = cPickle.load(fo)
-        fo.close()
-        return dict
-        
-This function reads in a CIFAR-10 pickle file and stores the data in a dictionary.
+## Brief Explanation
 
 ### Converting to Grayscale
 
-These local descriptors require the input to be in grayscale. The *colour2grayscale* function implements the conversion formula as defined [here](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0029740).
-
-G<sub>luminance</sub> = 0.3R + 0.59G + 0.11B
+These local descriptors require the input to be in grayscale.
 
     grayscaleImg = (imRed*0.3 + imGreen*0.59 + imBlue*0.11).astype(int)
-
-
-### Threshold Function
-
-This varies from operator to operator and is defined in the *heaviside* function.
 
 ### The Algorithm
 
@@ -74,33 +78,33 @@ First, I pad the image with zeros before running the algorithm.
 
 The function then goes on to implement the respective algorithm (CS-LBP in this case). 
 
-    cslbpImg = np.zeros((33, 33))
-    for x in range(1, 33):
-        for y in range(1, 33):		
-            s1 = heaviside(img[x-1, y-1] - img[x+1, y+1])
-            s2 = heaviside(img[x-1, y] - img[x+1, y])*2 
-            s3 = heaviside(img[x-1, y+1] - img[x+1, y-1])*4 
-            s4 = heaviside(img[x, y+1] - img[x, y-1])*8
+    pattern_img = np.zeros((img_height + 1, img_width + 1))
+        
+        for x in range(1, img_height + 1):
+            for y in range(1, img_width + 1):
+                
+                s1 = threshold(img[x-1, y-1] - img[x+1, y+1])
+                s2 = threshold(img[x-1, y] - img[x+1, y])*2 
+                s3 = threshold(img[x-1, y+1] - img[x+1, y-1])*4 
+                s4 = threshold(img[x, y+1] - img[x, y-1])*8
 
-            s = s1 + s2 + s3 + s4
+                s = s1 + s2 + s3 + s4
 
-            cslbpImg[x, y] = s
+                pattern_img[x, y] = s
 
 We then compute the histogram of the resultant image to get the feature vector.
 
-    hist = np.zeros(16).astype(int)
-
-    cslbpImg = cslbpImg.flatten()
-    for i in cslbpImg:
-        hist[i] = hist[i] + 1
+    histogram = np.histogram(pattern_img, bins = np.arange(17))[0]
 
 ### Classification
+
+    python classification.py --operator cslbp
 
 I'm using the [XGBoost](https://xgboost.readthedocs.io/en/latest/) Classifier for classification.
 
     model = XGBClassifier(n_estimators=800)
     model.fit(X_train, y_train)
 
-You have to play with the *n_estimators* to get the best accuracy.
+You have to play with *n_estimators* to get the best accuracy.
 
 And that's about it! Feel free to open an issue if required.

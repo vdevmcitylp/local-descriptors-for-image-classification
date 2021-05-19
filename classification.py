@@ -1,55 +1,45 @@
 
+import os
+import os.path as osp
+import argparse
+import numpy as np
 
-def train():
-	pass
+from sklearn.metrics import accuracy_score
+from xgboost import XGBClassifier
 
-def validate():
-	pass
+def run(x_train, x_test, y_train, y_test):
 
-def test():
-	pass
-
-
-def classification(labels, testLabels):
-
-	# Load features
-
-	with open("feature_cslbp", 'rb') as f:
-		X_train = cPickle.load(f)
-
-	with open("feature_test_cslbp", "rb") as f:
-		X_test = cPickle.load(f)
-
-	y_train = np.array(labels)
-	y_test = np.array(testLabels)
-	
 	# Split train into train-validation set
 
-
-
-
-	# split data into train and test sets
-	# seed = 7
-	# test_size = 0.33
-	# X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=test_size, random_state=seed)
-
-	model = XGBClassifier(n_estimators=800)
-	model.fit(X_train, y_train)
+	model = XGBClassifier(n_estimators = 800)
+	model.fit(x_train, y_train)
 
 	# make predictions for test data
-	y_pred = model.predict(X_test)
+	y_pred = model.predict(x_test)
 	predictions = [round(value) for value in y_pred]
 
-	# evaluate predictions
+	# Evaluate predictions
 	accuracy = accuracy_score(y_test, predictions)
-	# print "Accuracy: " + accuracy
-	print(accuracy)
+	print("Test accuracy: {}".format(accuracy))
 
+if __name__ == '__main__':
 
-with open("../Labels/train_labels", "rb") as f:
-	labels = pickle.load(f)
+	parser = argparse.ArgumentParser()
 
-with open("../Labels/test_labels", "rb") as f:
-	testLabels = pickle.load(f)
+	parser.add_argument("--operator", choices = ["cslbp", "csldp", "csldmp", "cslmp", "csltp", "xcslbp", "xcslmp", "xcsltp"], default = "cslbp")
 
-#classification(labels, testLabels)	
+	args = parser.parse_args()
+
+	with open(osp.join("features", "{}_train_features.npy".format(args.operator)), "rb") as handle:
+		x_train = np.load(handle)
+
+	with open(osp.join("features", "{}_test_features.npy".format(args.operator)), "rb") as handle:
+		x_test = np.load(handle)
+
+	with open(osp.join("dataset", "train_labels.npy"), "rb") as handle:
+		y_train = np.load(handle)
+
+	with open(osp.join("dataset", "test_labels.npy"), "rb") as handle:
+		y_test = np.load(handle)
+
+	run(x_train, x_test, y_train, y_test)

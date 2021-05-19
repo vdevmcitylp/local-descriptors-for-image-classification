@@ -1,74 +1,46 @@
-import pickle
+""" Center Symmetric LBP """
 
+from tqdm import tqdm
 import numpy as np
-import matplotlib.pyplot as plt
 
-from xgboost import XGBClassifier
-
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import average_precision_score, roc_auc_score
-from sklearn.preprocessing import label_binarize
-from sklearn.externals import joblib
-from sklearn.metrics import precision_recall_curve
-
-
-def heaviside(x):
+def threshold(x):
 	return x > 0
 
-def csLBP():
-
-	# Get image dimensions
+def get_features(images, img_height, img_width):
 	
+	zeroHorizontal = np.zeros(img_width + 2).reshape(1, img_width + 2)
+	zeroVertical = np.zeros(img_height).reshape(img_height, 1)
 
-	zeroHorizontal = np.zeros(34).reshape(1, 34)
-	zeroVertical = np.zeros(32).reshape(32, 1)
+	features = []
 
-	trainSet = []
+	for img in tqdm(images):
 
-	with open('../Grayscale/gray', 'rb') as f:
-		grayscaleImgList = cPickle.load(f)
+		img = np.concatenate((img, zeroVertical), axis = 1)
+		img = np.concatenate((zeroVertical, img), axis = 1)
+		img = np.concatenate((zeroHorizontal, img), axis = 0)
+		img = np.concatenate((img, zeroHorizontal), axis = 0)
 
-	grayscaleImgList = np.array(grayscaleImgList)	
-
-	for img in grayscaleImgList:
-
-		img = np.concatenate((img, zeroVertical), axis=1)
-		img = np.concatenate((zeroVertical, img), axis=1)
-		img = np.concatenate((zeroHorizontal, img), axis=0)
-		img = np.concatenate((img, zeroHorizontal), axis=0)
-
-		cslbpImg = np.zeros((33, 33))
-		for x in range(1, 33):
-			for y in range(1, 33):
+		pattern_img = np.zeros((img_height + 1, img_width + 1))
+		
+		for x in range(1, img_height + 1):
+			for y in range(1, img_width + 1):
 				
-				s1 = heaviside(img[x-1, y-1] - img[x+1, y+1])
-				s2 = heaviside(img[x-1, y] - img[x+1, y])*2 
-				s3 = heaviside(img[x-1, y+1] - img[x+1, y-1])*4 
-				s4 = heaviside(img[x, y+1] - img[x, y-1])*8
+				s1 = threshold(img[x-1, y-1] - img[x+1, y+1])
+				s2 = threshold(img[x-1, y] - img[x+1, y])*2 
+				s3 = threshold(img[x-1, y+1] - img[x+1, y-1])*4 
+				s4 = threshold(img[x, y+1] - img[x, y-1])*8
 
 				s = s1 + s2 + s3 + s4
 
-				cslbpImg[x, y] = s
+				pattern_img[x, y] = s
 
-		cslbpImg = cslbpImg[1:33, 1:33].astype(int) 	
-		plt.imshow(cslbpImg, cmap='gray')
-		plt.show()
-		hist = np.zeros(16).astype(int)
+		pattern_img = pattern_img[1:(img_height+1), 1:(img_width+1)].astype(int) 	
+		histogram = np.histogram(pattern_img, bins = np.arange(17))[0]
+		histogram = histogram.reshape(1, -1)
 
-		cslbpImg = cslbpImg.flatten()
-		for i in cslbpImg:
-			hist[i] = hist[i] + 1
+		features.append(histogram)
 
-		trainSet.append(hist)
+	features = np.concatenate(features, axis = 0)
 
-		# plt.hist(cslbpImg, bins=np.arange(256))
-		# plt.show()
-
-	trainSet = np.array(trainSet)
-
-	fo = open("feature_cslbp", "wb")
-	cPickle.dump(trainSet, fo)
-
-csLBP()
-# csLBPTest()
+	return features
+	
